@@ -1,0 +1,11 @@
+kind: Pod
+apiVersion: v1
+metadata:
+  name: nodejs-pod
+spec:
+  imagePullSecrets:
+    - name: docker-io-credentials
+  containers:
+    - name: nodejs-example-server
+      image: 'docker.io/chetangsanghi/nodejs-example:0.0.1-latest'
+      imagePullPolicy: Always

@@ -1,0 +1,12 @@
+﻿kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: nodejs-route-unsecured
+  labels:
+    app: nodejs-application
+spec:
+  to:
+    kind: Service
+    name: nodejs-service
+  port:
+    targetPort: 3000

@@ -1,0 +1,40 @@
+kind: BuildConfig
+apiVersion: build.openshift.io/v1
+metadata:
+  name: nodejs-build-config
+spec:
+  source:
+    dockerfile: |
+        FROM node as builder
+        WORKDIR /root/
+        COPY . ./
+        RUN npm install
+
+        FROM node:alpine
+        WORKDIR /root/
+        COPY --from=builder /root/ ./
+        RUN mkdir /.npm
+        RUN chgrp -R 0 /root && chmod -R g=u /root
+        RUN chgrp -R 0 /.npm && chmod -R g=u /.npm
+        ENTRYPOINT ["npm", "start"]
+        EXPOSE 3000
+    git:
+      uri: 'https://github.com/nodejs/examples.git'
+      ref: main
+    contextDir: servers/express/api-with-express-and-handlebars
+  strategy:
+    type: Docker
+    dockerStrategy:
+      noCache: true
+      pullSecret:
+        name: docker-io-credentials
+  output:
+    to:
+      kind: DockerImage
+      name: 'docker.io/chetangsanghi/nodejs-example:1.0.0-latest'
+    pushSecret:
+      name: docker-io-credentials
+  resources:
+    limits:
+      cpu: '1'
+      memory: 2G

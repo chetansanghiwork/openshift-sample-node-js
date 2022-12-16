@@ -1,0 +1,14 @@
+﻿kind: Service
+apiVersion: v1
+metadata:
+  name: nodejs-service
+  labels:
+    app: nodejs-application
+spec:
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000
+  type: ClusterIP
+  selector:
+    app: nodejs-application
